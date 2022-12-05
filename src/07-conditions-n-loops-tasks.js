@@ -128,9 +128,11 @@ function isTriangle(a, b, c) {
  *
  */
 function doRectanglesOverlap(rect1, rect2) {
-  const x = Math.max(rect1.left, rect2.left) < Math.min(rect1.left + rect1.width, rect2.left + rect2.width);
-  const y = Math.max(rect1.top, rect2.top) < Math.min(rect1.top + rect1.height, rect2.top + rect2.height);
-  return x && y;
+  const left = Math.max(rect1.left, rect2.left);
+  const right = Math.min(rect1.left + rect1.width, rect2.left + rect2.width);
+  const top = Math.max(rect1.top, rect2.top);
+  const bottom = Math.min(rect1.top + rect1.height, rect2.top + rect2.height);
+  return left < right && top < bottom;
 }
 
 
@@ -277,11 +279,12 @@ function reverseInteger(num) {
 function isCreditCardNumber(inputNum) {
   let flag = true;
   let sum = 0;
-  let digits = (`${inputNum}`).split('').reverse();
-  for (let _i = 0, _len = digits.length; _i < _len; _i++) {
-    let digit = digits[_i];
+  const digits = (`${inputNum}`).split('').reverse();
+  for (let i = 0, len = digits.length; i < len; i += 1) {
+    let digit = digits[i];
     digit = parseInt(digit, 10);
-    if ((flag = !flag)) {
+    flag = !flag;
+    if (flag) {
       digit *= 2;
     }
     if (digit > 9) {
@@ -433,7 +436,13 @@ function getCommonDirectoryPath(pathes) {
  */
 function getMatrixProduct(m1, m2) {
   const matrix = new Array(m1.length).fill(0).map(() => new Array(m2[0].length).fill(0));
-  return matrix.map((sm1, row) => sm1.map((a, col) => m1[row].reduce((sum, b, pos) => sum + b * m2[pos][col], 0)));
+  return matrix.map((sm1, row) => {
+    const rowMultiply = sm1.map((a, col) => {
+      const cellMultiply = m1[row].reduce((sum, b, pos) => sum + b * m2[pos][col], 0);
+      return cellMultiply;
+    });
+    return rowMultiply;
+  });
 }
 
 
@@ -472,6 +481,7 @@ function evaluateTicTacToePosition(position) {
     if (acc === 'X' || acc === '0') return acc;
     if (val.every((e) => e === 'X') && val.length === 3) return 'X';
     if (val.every((e) => e === '0') && val.length === 3) return '0';
+    return acc;
   }, '');
   if (isLine) return isLine;
 
@@ -479,6 +489,7 @@ function evaluateTicTacToePosition(position) {
     if (acc === 'X' || acc === '0') return acc;
     if (position.map((pos) => pos[index]).every((e) => e === 'X') && val.length === 3) return 'X';
     if (position.map((pos) => pos[index]).every((e) => e === '0') && val.length === 3) return '0';
+    return acc;
   }, '');
   if (isColumn) return isColumn;
 
