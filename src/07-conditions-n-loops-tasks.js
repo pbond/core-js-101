@@ -275,19 +275,11 @@ function reverseInteger(num) {
  *   4916123456789012 => false
  */
 function isCreditCardNumber(inputNum) {
-  let digit;
-  let digits;
-  let flag;
-  let sum;
-  let _i;
-  let
-    _len;
-  flag = true;
-  sum = 0;
-  digits = (`${inputNum}`).split('')
-    .reverse();
-  for (_i = 0, _len = digits.length; _i < _len; _i++) {
-    digit = digits[_i];
+  let flag = true;
+  let sum = 0;
+  let digits = (`${inputNum}`).split('').reverse();
+  for (let _i = 0, _len = digits.length; _i < _len; _i++) {
+    let digit = digits[_i];
     digit = parseInt(digit, 10);
     if ((flag = !flag)) {
       digit *= 2;
@@ -500,7 +492,6 @@ function evaluateTicTacToePosition(position) {
 
   return undefined;
 }
-
 
 module.exports = {
   getFizzBuzz,
